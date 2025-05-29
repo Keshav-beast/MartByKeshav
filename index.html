@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcomApp - Shop Now</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f5;
+            --bg-tertiary: #e5e7eb;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-light: #a0aec0;
+            --accent-primary: #2563eb;
+            --accent-secondary: #f97316;
+            --accent-success: #22c55e;
+            --border-color: #333333;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.2);
+            --out-of-stock-bg: rgba(107, 114, 128, 0.9);
+            --gradient-accent: linear-gradient(135deg, #2563eb, #3b82f6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .site-header {
+            background: var(--bg-primary);
+            padding: 12px 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .site-logo {
+            font-size: 2em;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: transform 0.3s ease;
+        }
+
+        .site-logo span {
+            color: var(--accent-primary);
+        }
+
+        .site-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .search-bar {
+            display: flex;
+            max-width: 500px;
+            width: 100%;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-bar:hover,
+        .search-bar:focus-within {
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            padding: 12px 16px;
+            border: none;
+            background: var(--bg-tertiary);
+            font-size: 1em;
+            color: var(--text-primary);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            background: var(--bg-primary);
+        }
+
+        .search-bar button {
+            padding: 12px 20px;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: transform 0.2s ease;
+        }
+
+        .search-bar button:hover {
+            transform: scale(1.05);
+        }
+
+        .main-products-section {
+            padding: 40px 0;
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--accent-primary);
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .homepage-product-grid {
+            display: grid;
+            gap: 24px;
+            grid-template-columns: 1fr;
+        }
+
+        @media (min-width: 640px) {
+            .homepage-product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .homepage-product-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .homepage-product-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .product-card-public {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .product-card-public:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image-public {
+            width: 100%;
+            padding-top: 100%;
+            background: var(--bg-tertiary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image-public img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card-public:hover .product-image-public img {
+            transform: scale(1.05);
+        }
+
+        .product-image-public .no-img-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1em;
+            color: var(--text-light);
+        }
+
+        .product-info-public {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .product-name-public {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .price-details-public {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .selling-price-public {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .mrp-public {
+            font-size: 1em;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .discount-public {
+            font-size: 0.9em;
+            color: var(--accent-success);
+            font-weight: 600;
+            background: #d1fae5;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .tagline-public {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-height: 2.7em;
+            line-height: 1.35em;
+        }
+
+        .view-button-public {
+            background: var(--gradient-accent);
+            color: white;
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            margin-top: auto;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .view-button-public:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            font-size: 0.85em;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card-public:hover .product-badge {
+            transform: scale(1.1);
+        }
+
+        .badge-out-of-stock {
+            left: 12px;
+            background: var(--out-of-stock-bg);
+            color: var(--text-primary);
+        }
+
+        .badge-trending {
+            right: 12px;
+            background: var(--accent-secondary);
+        }
+
+        #loadingProductsPublic,
+        #noProductsPublic {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: var(--text-secondary);
+        }
+
+        #loadingProductsPublic {
+            position: relative;
+        }
+
+        #loadingProductsPublic::before {
+            content: '';
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 4px solid var(--text-light);
+            border-top: 4px solid var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Skeleton Loading for Product Cards */
+        .product-card-public.loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card-public.loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, #f3f4f6 50%, var(--bg-tertiary) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            z-index: 3;
+        }
+
+        .product-card-public.loading * {
+            visibility: hidden;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 12px;
+            }
+
+            .main-products-section {
+                padding: 24px 0;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 0;
+            }
+
+            .search-bar {
+                max-width: none;
+            }
+
+            .product-name-public {
+                font-size: 1.1em;
+            }
+
+            .selling-price-public {
+                font-size: 1.3em;
+            }
+
+            .view-button-public {
+                padding: 10px 12px;
+                font-size: 0.95em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-logo {
+                font-size: 1.6em;
+            }
+
+            .search-bar input {
+                font-size: 0.95em;
+                padding: 10px 12px;
+            }
+
+            .search-bar button {
+                padding: 10px 16px;
+            }
+
+            .product-info-public {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-content">
+            <a href="index.html" class="site-logo">Ecom<span>App</span></a>
+            <form class="search-bar" id="searchForm">
+                <input type="search" id="searchInputHomepage" placeholder="Search products...">
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="container main-products-section">
+        <h1 class="section-title">Explore Our Products</h1>
+
+        <div class="homepage-product-grid" id="homepageProductGridContainer">
+            <p id="loadingProductsPublic">Loading products, please wait...</p>
+            <p id="noProductsPublic" style="display:none;">No products available right now. Please check back soon!</p>
+            <!-- Product cards will be dynamically inserted here by JavaScript -->
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, onValue, query /*, orderByChild, equalTo */ } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // ❗❗❗ CRITICAL: REPLACE WITH YOUR ACTUAL FIREBASE CONFIGURATION ❗❗❗
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxR7ldRWy3Q-QlqmaHbbgNNlTxIsmJuRw", // YOUR_API_KEY
+            authDomain: "myecomapp-4290b.firebaseapp.com",    // YOUR_AUTH_DOMAIN
+            databaseURL: "https://myecomapp-4290b-default-rtdb.firebaseio.com", // YOUR_DATABASE_URL
+            projectId: "myecomapp-4290b",                   // YOUR_PROJECT_ID
+            storageBucket: "myecomapp-4290b.firebasestorage.app", // YOUR_STORAGE_BUCKET
+            messagingSenderId: "133698166939",             // YOUR_MESSAGING_SENDER_ID
+            appId: "1:133698166939:web:0f9f3075864dc64a77e63e" // YOUR_APP_ID
+        };
+        // ❗❗❗ END OF FIREBASE CONFIGURATION ❗❗❗
+
+        let db;
+        let allProductsData = {};
+
+        try {
+            // console.log("Homepage - Config:", firebaseConfig.projectId);
+            const app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            // console.log("Homepage - Firebase init OK.");
+
+            const productGridContainer = document.getElementById('homepageProductGridContainer');
+            const loadingMessage = document.getElementById('loadingProductsPublic');
+            const noProductsMessage = document.getElementById('noProductsPublic');
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInputHomepage');
+
+            function createHomepageProductCard(productId, productData, sellerIdIfKnown = null) {
+                if (!productData || typeof productData !== 'object') {
+                    console.warn(`Homepage: Invalid productData for ${productId}`);
+                    return null;
+                }
+
+                const cardLink = document.createElement('a');
+                let productDetailUrl = `productInfo.html?productId=${productId}`;
+                // If products are fetched from a 'products_listed' node that includes 'sellerId'
+                if (productData.sellerId) {
+                    productDetailUrl += `&sellerId=${productData.sellerId}`;
+                } 
+                // If products were fetched from 'sellers/{sellerId}/products' and sellerIdIfKnown is passed
+                else if (sellerIdIfKnown) {
+                     productDetailUrl += `&sellerId=${sellerIdIfKnown}`;
+                }
+
+
+                cardLink.href = productDetailUrl;
+                cardLink.classList.add('product-card-public');
+                cardLink.dataset.productId = productId;
+
+                const name = productData.name || productData.productName || 'Product Title';
+                let imageUrl = '';
+                if (productData.images && typeof productData.images === 'object' && !Array.isArray(productData.images)) {
+                    imageUrl = productData.images.image1 || productData.images.image2 || '';
+                } else if (Array.isArray(productData.images) && productData.images.length > 0) {
+                    imageUrl = productData.images[0];
+                } else if (typeof productData.imageUrl === 'string') {
+                    imageUrl = productData.imageUrl;
+                }
+                imageUrl = (typeof imageUrl === 'string' && imageUrl.trim() !== '') ? imageUrl.trim() : '';
+
+                const price = parseFloat(productData.price || 0);
+                const mrp = parseFloat(productData.mrp || 0);
+                let discountDisplay = productData.discount || '';
+
+                if (!discountDisplay && mrp > price && price > 0) {
+                    const discountPercent = Math.round(((mrp - price) / mrp) * 100);
+                    if (discountPercent > 0) discountDisplay = `${discountPercent}% Off`;
+                }
+
+                const shortTagline = productData.shortTagline || '';
+                const stock = parseInt(productData.stock || 0);
+                const isOutOfStock = stock <= 0;
+
+                let badgesHTML = '';
+                if (isOutOfStock) {
+                    badgesHTML += `<div class="product-badge badge-out-of-stock">Out of Stock</div>`;
+                }
+                // Example: if (productData.isTrending) badgesHTML += `<div class="product-badge badge-trending">🔥 Trending</div>`;
+
+                cardLink.innerHTML = `
+                    <div style="position:relative;">
+                        ${badgesHTML}
+                        <div class="product-image-public">
+                            ${imageUrl ? 
+                                `<img src="${imageUrl}" alt="${name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` 
+                                : ''}
+                            <span class="no-img-text" style="${imageUrl ? 'display:none;' : 'display:block;'}">${imageUrl ? 'Error' : 'No Image'}</span>
+                        </div>
+                    </div>
+                    <div class="product-info-public">
+                        <h3 class="product-name-public">${name}</h3>
+                        <div class="price-details-public">
+                            <span class="selling-price-public">₹${price.toFixed(2)}</span>
+                            ${mrp > price ? `<span class="mrp-public">₹${mrp.toFixed(2)}</span>` : ''}
+                            ${discountDisplay ? `<span class="discount-public">${discountDisplay}</span>` : ''}
+                        </div>
+                        ${shortTagline ? `<p class="tagline-public">${shortTagline}</p>` : ''}
+                        <div class="view-button-public">${isOutOfStock ? 'Notify Me' : 'View Details'}</div>
+                    </div>
+                `;
+                return cardLink;
+            }
+
+            function displayHomepageProducts(productsToDisplay) {
+                if (loadingMessage) loadingMessage.style.display = 'none';
+                if (!productGridContainer) { console.error("Homepage: Product grid container not found!"); return; }
+                
+                productGridContainer.innerHTML = '';
+
+                if (!productsToDisplay || Object.keys(productsToDisplay).length === 0) {
+                    if (noProductsMessage) {
+                         noProductsMessage.textContent = "No products found matching your criteria.";
+                         noProductsMessage.style.display = 'block';
+                    }
+                    // console.log("Homepage - No products to display based on current data/filter.");
+                    return;
+                }
+                if (noProductsMessage) noProductsMessage.style.display = 'none';
+
+                let displayedCount = 0;
+                for (const productId in productsToDisplay) { // Assuming productsToDisplay is flat {prodId: data, ...}
+                    if (productsToDisplay.hasOwnProperty(productId)) {
+                        const productData = productsToDisplay[productId];
+                        if (productData.status && (productData.status !== 'live' && productData.status !== 'approved')) {
+                            continue;
+                        }
+                        // Pass productData.sellerId if it exists, for the link to productInfo.html
+                        const cardElement = createHomepageProductCard(productId, productData, productData.sellerId);
+                        if (cardElement) {
+                            productGridContainer.appendChild(cardElement);
+                            displayedCount++;
+                        }
+                    }
+                }
+                // console.log(`Homepage - Rendered ${displayedCount} products.`);
+                 if (displayedCount === 0 && noProductsMessage) {
+                    noProductsMessage.textContent = "No live products available currently.";
+                    noProductsMessage.style.display = 'block';
+                }
+            }
+            
+            // --- CHOOSE YOUR FIREBASE PATH FOR PRODUCTS ---
+            // This path should point to a node where ALL products (from all sellers, if applicable) are listed.
+            // E.g., 'products_listed' if you have a flat list, or 'sellers' if you iterate through sellers.
+            const productsRefPath = 'products_listed'; // <<<< MOST LIKELY THIS IS WHAT YOU WANT FOR A HOMEPAGE
+            // const productsRefPath = 'sellers'; // <<<< Use this if you want to iterate through sellers and their products
+
+            const productsQuery = ref(db, productsRefPath);
+            
+            console.log(`Homepage - Setting up Firebase listener for products at: ${productsRefPath}`);
+            onValue(productsQuery, (snapshot) => {
+                const rawData = snapshot.val();
+                // console.log(`Homepage - Raw data from Firebase '${productsRefPath}' node:`, rawData);
+
+                let productsToProcess = {};
+                if (productsRefPath === 'sellers' && rawData) {
+                    // If fetching from 'sellers', aggregate all products from all sellers
+                    for (const sellerId in rawData) {
+                        if (rawData[sellerId] && rawData[sellerId].products) {
+                            for (const productId in rawData[sellerId].products) {
+                                // Add sellerId to product data if it's not already there for linking
+                                if (!rawData[sellerId].products[productId].sellerId) {
+                                    rawData[sellerId].products[productId].sellerId = sellerId;
+                                }
+                                productsToProcess[productId] = rawData[sellerId].products[productId];
+                            }
+                        }
+                    }
+                } else if (rawData) {
+                    // If fetching from a flat list like 'products_listed'
+                    productsToProcess = rawData;
+                }
+                
+                allProductsData = productsToProcess || {};
+                displayHomepageProducts(allProductsData);
+            }, (error) => {
+                console.error(`Homepage - Firebase read failed for '${productsRefPath}': `, error);
+                if (loadingMessage) loadingMessage.style.display = 'none';
+                if (noProductsMessage) {
+                    noProductsMessage.textContent = 'Failed to load products. Please try again later.';
+                    noProductsMessage.style.display = 'block';
+                }
+            });
+
+            if (searchForm && searchInput) {
+                searchForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    if (!searchTerm) {
+                        displayHomepageProducts(allProductsData);
+                        return;
+                    }
+                    const filteredProducts = {};
+                    for (const productId in allProductsData) {
+                        if (allProductsData.hasOwnProperty(productId)) {
+                            const product = allProductsData[productId];
+                            const name = product.name || product.productName || "";
+                            const category = product.category || "";
+                            const brand = product.brand || "";
+                            const tagline = product.shortTagline || "";
+
+                            if (name.toLowerCase().includes(searchTerm) ||
+                                category.toLowerCase().includes(searchTerm) ||
+                                brand.toLowerCase().includes(searchTerm) ||
+                                tagline.toLowerCase().includes(searchTerm)) {
+                                filteredProducts[productId] = product;
+                            }
+                        }
+                    }
+                    displayHomepageProducts(filteredProducts);
+                });
+                searchInput.addEventListener('input', () => {
+                    if (searchInput.value.trim() === "") {
+                        displayHomepageProducts(allProductsData);
+                    }
+                });
+            }
+
+        } catch (e) {
+            console.error("Homepage - CRITICAL SCRIPT ERROR:", e);
+            // Try to display an error on the page itself if possible
+             const body = document.querySelector('body');
+            if (body) {
+                const errorDiv = document.createElement('div');
+                errorDiv.style.color = 'red'; errorDiv.style.padding = '20px';
+                errorDiv.style.textAlign = 'center'; errorDiv.style.backgroundColor = 'white';
+                errorDiv.textContent = `CRITICAL ERROR: ${e.message}. Check console (F12). Ensure Firebase config is correct and SDKs are loaded.`;
+                if(document.getElementById('loadingProductsPublic')) document.getElementById('loadingProductsPublic').style.display = 'none';
+                if(document.getElementById('noProductsPublic')) document.getElementById('noProductsPublic').style.display = 'none';
+                if (body.firstChild) { body.insertBefore(errorDiv, body.firstChild); } else { body.appendChild(errorDiv); }
+            }
+        }
+    </script>
+</body>
+</html>
