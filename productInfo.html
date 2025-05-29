@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details -</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #4B5563;
+            --text-light: #9CA3AF;
+            --accent-primary: #2563EB;
+            --accent-secondary: #F97316;
+            --accent-success: #22C55E;
+            --accent-error: #EF4444;
+            --star-yellow: #FBBF24;
+            --border-color: #E5E7EB;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+            --disabled-bg: #D1D5DB;
+            --gradient-accent: linear-gradient(135deg, #2563EB, #3B82F6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .product-info-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            padding-bottom: 120px;
+            position: relative;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .page-simple-header {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+
+        .back-button {
+            font-size: 1.8em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .back-button:hover {
+            color: var(--accent-primary);
+            transform: scale(1.1);
+        }
+
+        .header-page-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .main-image-section {
+            width: 100%;
+            background-color: var(--bg-tertiary);
+            position: relative;
+            padding-top: 75%;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .main-image-section img#mainProductImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .main-image-section img#mainProductImage:hover {
+            transform: scale(1.05);
+        }
+
+        .main-image-placeholder-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-light);
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .image-gallery-scroll {
+            padding: 16px;
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .image-gallery-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-thumbnail {
+            width: 90px;
+            height: 90px;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-thumbnail:hover,
+        .gallery-thumbnail.active {
+            border-color: var(--accent-primary);
+            transform: scale(1.05);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .gallery-thumbnail .thumb-placeholder-text {
+            font-size: 0.8em;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .product-details-content {
+            padding: 24px;
+            background: var(--bg-primary);
+        }
+
+        .product-title {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .product-pricing-info {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .current-price {
+            font-size: 2.4em;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .mrp-price {
+            font-size: 1.2em;
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        .discount-percentage {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            background-color: #FEF3C7;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .quantity-selector-section {
+            margin-bottom: 24px;
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .quantity-selector-section label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: var(--text-primary);
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-primary);
+            padding: 8px;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .quantity-btn {
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            font-size: 1.6em;
+            line-height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .quantity-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .quantity-btn:disabled {
+            background: var(--disabled-bg);
+            color: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #quantityDisplay {
+            font-size: 1.4em;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .seller-info {
+            margin-bottom: 24px;
+            font-size: 1em;
+            color: var(--text-secondary);
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+
+        .seller-info strong {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .product-description-section {
+            margin-bottom: 32px;
+            padding: 16px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .description-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .description-text {
+            font-size: 1em;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .buy-now-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, var(--bg-primary), #F9FAFB);
+            padding: 16px 24px;
+            box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .total-price-display {
+            font-size: 1em;
+            color: var(--text-secondary);
+        }
+
+        .total-price-display strong {
+            font-size: 1.4em;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .buy-now-button {
+            background: var(--accent-secondary);
+            color: var(--bg-primary);
+            border: none;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            flex-grow: 1;
+            max-width: 300px;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .buy-now-button:hover {
+            background: #EA580C;
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 1001;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--hover-shadow);
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            transform: translateY(-30px);
+            transition: transform 0.3s ease;
+        }
+
+        #orderModal:target {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #orderModal:target .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-modal-btn {
+            font-size: 1.8em;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .close-modal-btn:hover {
+            color: var(--accent-error);
+            transform: scale(1.1);
+        }
+
+        .order-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .order-form label {
+            display: block;
+            font-size: 1em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .order-form input[type="text"],
+        .order-form input[type="tel"],
+        .order-form input[type="email"],
+        .order-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .order-form input:focus,
+        .order-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .order-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .order-summary-modal {
+            margin-bottom: 20px;
+            font-size: 1em;
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .order-summary-modal p {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .order-summary-modal p strong {
+            color: var(--text-primary);
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--gradient-accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .place-order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .place-order-btn:disabled {
+            background: var(--disabled-bg);
+            color: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-message {
+            text-align: center;
+            padding: 10px;
+            margin-top: 12px;
+            border-radius: 8px;
+            display: none;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .form-message.success {
+            background: #DCFCE7;
+            color: var(--accent-success);
+            border: 1px solid var(--accent-success);
+            display: block;
+        }
+
+        .form-message.error {
+            background: #FEE2E2;
+            color: var(--accent-error);
+            border: 1px solid var(--accent-error);
+            display: block;
+        }
+
+        /* Skeleton Loading */
+        .main-image-section.loading::before,
+        .gallery-thumbnail.loading::before,
+        .product-title.loading::before,
+        .product-pricing-info.loading::before,
+        .product-description-section.loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary) 25%, #E5E7EB 50%, var(--bg-secondary) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .product-info-container {
+                padding-bottom: 100px;
+                border-radius: 0;
+            }
+
+            .page-simple-header {
+                padding: 12px 16px;
+            }
+
+            .header-page-title {
+                font-size: 1.2em;
+            }
+
+            .main-image-section {
+                padding-top: 100%;
+            }
+
+            .image-gallery-scroll {
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .gallery-thumbnail {
+                width: 70px;
+                height: 70px;
+            }
+
+            .product-details-content {
+                padding: 16px;
+            }
+
+            .product-title {
+                font-size: 1.8em;
+            }
+
+            .current-price {
+                font-size: 2em;
+            }
+
+            .quantity-selector-section {
+                padding: 12px;
+            }
+
+            .buy-now-bar {
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .total-price-display {
+                text-align: center;
+                width: 100%;
+            }
+
+            .buy-now-button {
+                padding: 12px;
+                font-size: 1.1em;
+                max-width: 100%;
+            }
+
+            .modal-content {
+                padding: 16px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .modal-title {
+                font-size: 1.4em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-title {
+                font-size: 1.6em;
+            }
+
+            .current-price {
+                font-size: 1.8em;
+            }
+
+            .quantity-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1.4em;
+            }
+
+            .buy-now-button {
+                font-size: 1em;
+            }
+
+            .modal-content {
+                margin-top: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="product-info-container">
+        <header class="page-simple-header">
+            <a href="index.html" class="back-button" id="backBtn">←</a>
+            <span class="header-page-title" id="productNameHeader">Product Details</span>
+        </header>
+
+        <section class="main-image-section">
+            <img id="mainProductImage" src="" alt="Main Product Image" style="display: none;">
+            <span class="main-image-placeholder-text" id="mainImagePlaceholder">Loading Image...</span>
+        </section>
+
+        <section class="image-gallery-scroll" id="imageGalleryContainer">
+             <p id="galleryPlaceholder" style="padding:10px; color: var(--text-light); font-size:0.9em;">Loading gallery...</p>
+        </section>
+
+        <section class="product-details-content">
+            <h1 class="product-title" id="productName">[Product Name]</h1>
+
+            <div class="product-pricing-info">
+                <span class="current-price" id="productPrice">₹--</span>
+                <span class="mrp-price" id="productMrp" style="display: none;">₹--</span>
+                <span class="discount-percentage" id="productDiscount" style="display: none;">--% Off</span>
+            </div>
+
+            <div class="quantity-selector-section">
+                <label for="quantityDisplay">Quantity:</label>
+                <div class="quantity-controls">
+                    <button class="quantity-btn" id="decreaseQuantityBtn">-</button>
+                    <span id="quantityDisplay">1</span>
+                    <button class="quantity-btn" id="increaseQuantityBtn">+</button>
+                </div>
+            </div>
+
+            <div class="seller-info">
+                Sold by: <strong id="sellerStoreName">[Seller Store]</strong>
+            </div>
+
+            <div class="product-description-section">
+                <h2 class="description-title">Product Description</h2>
+                <p class="description-text" id="productDescription">[Loading description...]</p>
+            </div>
+        </section>
+
+        <div class="buy-now-bar">
+            <div class="total-price-display">Total: <strong id="buyNowTotalPrice">₹--</strong></div>
+            <a href="#orderModal" class="buy-now-button" id="buyNowBtnTrigger">Buy Now</a>
+        </div>
+    </div>
+
+    <!-- Order Modal/Popup -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h2 class="modal-title">Confirm Your Order</h2>
+                <a href="#" class="close-modal-btn" title="Close">×</a>
+            </header>
+            <form class="order-form" id="customerOrderForm">
+                <div class="order-summary-modal">
+                    <p><strong>Product:</strong> <span id="modalProductName">[Product Name]</span></p>
+                    <p><strong>Quantity:</strong> <span id="modalQuantity">1</span></p>
+                    <p><strong>Price per item:</strong> <span id="modalItemPrice">₹--</span></p>
+                    <p><strong>Total Amount:</strong> <strong id="modalTotalAmount">₹--</strong></p>
+                </div>
+                <div class="form-group">
+                    <label for="customerName">Full Name *</label>
+                    <input type="text" id="customerName" name="customerName" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="customerMobile">Mobile Number *</label>
+                    <input type="tel" id="customerMobile" name="customerMobile" required placeholder="10-digit mobile number" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Full Address *</label>
+                    <textarea id="customerAddress" name="customerAddress" rows="3" required placeholder="House No, Street, Landmark..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="customerPincode">Pincode *</label>
+                    <input type="text" id="customerPincode" name="customerPincode" required placeholder="6-digit Pincode" maxlength="6">
+                </div>
+                 <div class="form-group">
+                    <label for="customerCity">City *</label>
+                    <input type="text" id="customerCity" name="customerCity" required placeholder="Your City">
+                </div>
+                <div class="form-group">
+                    <label for="customerState">State *</label>
+                    <input type="text" id="customerState" name="customerState" required placeholder="Your State">
+                </div>
+                <button type="submit" class="place-order-btn" id="placeOrderSubmitBtn">Place Order</button>
+                <p id="orderFormMessage" class="form-message"></p>
+            </form>
+        </div>
+    </div>
+
+
+            <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, get, set, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // ❗❗❗ CRITICAL: REPLACE WITH YOUR ACTUAL FIREBASE CONFIGURATION ❗❗❗
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxR7ldRWy3Q-QlqmaHbbgNNlTxIsmJuRw", // YOUR_API_KEY
+            authDomain: "myecomapp-4290b.firebaseapp.com",    // YOUR_AUTH_DOMAIN
+            databaseURL: "https://myecomapp-4290b-default-rtdb.firebaseio.com", // YOUR_DATABASE_URL
+            projectId: "myecomapp-4290b",                   // YOUR_PROJECT_ID
+            storageBucket: "myecomapp-4290b.firebasestorage.app", // YOUR_STORAGE_BUCKET
+            messagingSenderId: "133698166939",             // YOUR_MESSAGING_SENDER_ID
+            appId: "1:133698166939:web:0f9f3075864dc64a77e63e" // YOUR_APP_ID
+        };
+        // ❗❗❗ END OF FIREBASE CONFIGURATION ❗❗❗
+
+        let db;
+        let currentProductData = null;
+        let currentQuantity = 1;
+        let currentProductId = null;
+        let currentSellerId = null;
+
+        // Helper function to display messages in the order form
+        function showOrderFormMessage(message, type = 'error') {
+            const msgEl = document.getElementById('orderFormMessage');
+            if (msgEl) {
+                msgEl.textContent = message;
+                msgEl.className = `form-message ${type}`; // type can be 'success', 'error', 'info'
+            }
+        }
+
+        try {
+            console.log("DEBUG: ProductInfo - Initializing Firebase with project ID:", firebaseConfig.projectId);
+            const app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            console.log("DEBUG: ProductInfo - Firebase initialized. DB instance:", db ? "OK" : "FAILED");
+
+            // DOM Elements
+            const mainProductImageEl = document.getElementById('mainProductImage');
+            const mainImagePlaceholderEl = document.getElementById('mainImagePlaceholder');
+            const imageGalleryContainerEl = document.getElementById('imageGalleryContainer'); // Changed ID
+            const productNameHeaderEl = document.getElementById('productNameHeader');
+            const productNameEl = document.getElementById('productName');
+            const productPriceEl = document.getElementById('productPrice');
+            const productMrpEl = document.getElementById('productMrp');
+            const productDiscountEl = document.getElementById('productDiscount');
+            const sellerStoreNameEl = document.getElementById('sellerStoreName');
+            const productDescriptionEl = document.getElementById('productDescription');
+            const decreaseQuantityBtn = document.getElementById('decreaseQuantityBtn');
+            const increaseQuantityBtn = document.getElementById('increaseQuantityBtn');
+            const quantityDisplayEl = document.getElementById('quantityDisplay');
+            const buyNowTotalPriceEl = document.getElementById('buyNowTotalPrice');
+            const customerOrderForm = document.getElementById('customerOrderForm');
+            const modalProductNameEl = document.getElementById('modalProductName');
+            const modalQuantityEl = document.getElementById('modalQuantity');
+            const modalItemPriceEl = document.getElementById('modalItemPrice');
+            const modalTotalAmountEl = document.getElementById('modalTotalAmount');
+            const placeOrderSubmitBtn = document.getElementById('placeOrderSubmitBtn');
+            const buyNowBtnTrigger = document.getElementById('buyNowBtnTrigger');
+
+
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            function updateTotalPriceDisplay() {
+                if (currentProductData && currentProductData.price && quantityDisplayEl && buyNowTotalPriceEl && modalTotalAmountEl && modalItemPriceEl && modalQuantityEl) {
+                    const price = parseFloat(currentProductData.price);
+                    const total = price * currentQuantity;
+                    quantityDisplayEl.textContent = currentQuantity;
+                    buyNowTotalPriceEl.textContent = `₹${total.toFixed(2)}`;
+                    // Update modal too
+                    modalQuantityEl.textContent = currentQuantity;
+                    modalItemPriceEl.textContent = `₹${price.toFixed(2)}`;
+                    modalTotalAmountEl.textContent = `₹${total.toFixed(2)}`;
+                }
+            }
+
+            if(decreaseQuantityBtn) {
+                decreaseQuantityBtn.addEventListener('click', () => {
+                    if (currentQuantity > 1) {
+                        currentQuantity--;
+                        updateTotalPriceDisplay();
+                    }
+                });
+            }
+            if(increaseQuantityBtn) {
+                 increaseQuantityBtn.addEventListener('click', () => {
+                    // Later, you can add a check against productData.stock
+                    currentQuantity++;
+                    updateTotalPriceDisplay();
+                });
+            }
+             if(buyNowBtnTrigger && modalProductNameEl && currentProductData) { // Ensure currentProductData is available
+                buyNowBtnTrigger.addEventListener('click', () => {
+                    if(currentProductData){ // Check again before populating modal
+                        modalProductNameEl.textContent = currentProductData.name || currentProductData.productName || "Product";
+                        updateTotalPriceDisplay(); // This will update modal quantity and prices
+                    } else {
+                        alert("Product details are not loaded yet. Please wait.");
+                        window.location.hash = '#'; // Close modal if product data isn't ready
+                    }
+                });
+            }
+
+
+            async function loadProductDetails() {
+                if (!db) { console.error("DEBUG: DB not initialized in loadProductDetails."); return; }
+
+                currentProductId = getQueryParam('productId');
+                currentSellerId = getQueryParam('sellerId'); // This might be null
+
+                console.log(`DEBUG: URL Params - productId: '${currentProductId}', sellerId: '${currentSellerId}'`);
+
+                if (!currentProductId) {
+                    console.error("DEBUG: Product ID is MISSING from URL.");
+                    if(productNameEl) productNameEl.textContent = "Product ID missing!";
+                    if(mainImagePlaceholderEl) mainImagePlaceholderEl.textContent = "Invalid Link";
+                    if(buyNowBtnTrigger) buyNowBtnTrigger.style.display = 'none';
+                    return;
+                }
+
+                let productPath;
+                if (currentSellerId) { // If sellerId is present, assume nested structure
+                    productPath = `sellers/${currentSellerId}/products/${currentProductId}`;
+                } else { // Fallback to a flat 'products_listed' structure if no sellerId
+                    productPath = `products_listed/${currentProductId}`;
+                    console.warn(`DEBUG: sellerId not in URL, trying path: ${productPath}`);
+                }
+                console.log(`DEBUG: Attempting to fetch from Firebase path: '${productPath}'`);
+                const productRefNode = ref(db, productPath);
+
+                try {
+                    const snapshot = await get(productRefNode);
+                    console.log(`DEBUG: Snapshot for '${productPath}'. Exists:`, snapshot.exists());
+
+                    if (snapshot.exists()) {
+                        currentProductData = snapshot.val();
+                        console.log("DEBUG: Fetched Product Data:", JSON.parse(JSON.stringify(currentProductData))); // Log a copy
+
+                        // Populate Main Image
+                        let firstValidImageUrl = '';
+                        const imageUrls = [];
+                        if (currentProductData.images && typeof currentProductData.images === 'object' && !Array.isArray(currentProductData.images)) {
+                            Object.values(currentProductData.images).forEach(url => { if (typeof url === 'string' && url.trim() !== '') imageUrls.push(url.trim()); });
+                        } else if (Array.isArray(currentProductData.images)) {
+                            currentProductData.images.forEach(url => { if (typeof url === 'string' && url.trim() !== '') imageUrls.push(url.trim()); });
+                        } else if (typeof currentProductData.imageUrl === 'string' && currentProductData.imageUrl.trim() !== '') {
+                            imageUrls.push(currentProductData.imageUrl.trim());
+                        }
+                        
+                        if (imageUrls.length > 0) {
+                            firstValidImageUrl = imageUrls[0];
+                            if(mainProductImageEl) {
+                                mainProductImageEl.src = firstValidImageUrl;
+                                mainProductImageEl.alt = currentProductData.name || "Product Image";
+                                mainProductImageEl.style.display = 'block';
+                            }
+                            if(mainImagePlaceholderEl) mainImagePlaceholderEl.style.display = 'none';
+                        } else {
+                            if(mainProductImageEl) mainProductImageEl.style.display = 'none';
+                            if(mainImagePlaceholderEl) {
+                                mainImagePlaceholderEl.textContent = 'No Image Available';
+                                mainImagePlaceholderEl.style.display = 'block';
+                            }
+                        }
+
+                        // Populate Gallery
+                        if(imageGalleryContainerEl){
+                            imageGalleryContainerEl.innerHTML = ''; // Clear placeholder
+                            if (imageUrls.length > 0) {
+                                imageUrls.forEach((imgUrl, index) => {
+                                    const thumbDiv = document.createElement('div');
+                                    thumbDiv.classList.add('gallery-thumbnail');
+                                    if (index === 0) thumbDiv.classList.add('active');
+                                    thumbDiv.dataset.imgSrc = imgUrl;
+                                    thumbDiv.innerHTML = `<img src="${imgUrl}" alt="Thumbnail ${index + 1}" onerror="this.parentElement.innerHTML='<span class=thumb-placeholder-text>Err</span>'">`;
+                                    thumbDiv.addEventListener('click', () => {
+                                        if(mainProductImageEl) mainProductImageEl.src = imgUrl;
+                                        document.querySelectorAll('.gallery-thumbnail.active').forEach(t => t.classList.remove('active'));
+                                        thumbDiv.classList.add('active');
+                                    });
+                                    imageGalleryContainerEl.appendChild(thumbDiv);
+                                });
+                            } else {
+                                imageGalleryContainerEl.innerHTML = '<p style="color: var(--text-light);font-size:0.9em;padding:0 10px;">No additional images.</p>';
+                            }
+                        }
+
+                        // Populate Text Details
+                        const pName = currentProductData.name || currentProductData.productName || "Product Title";
+                        if(productNameHeaderEl) productNameHeaderEl.textContent = pName.length > 20 ? pName.substring(0, 17) + "..." : pName;
+                        if(productNameEl) productNameEl.textContent = pName;
+                        if(modalProductNameEl) modalProductNameEl.textContent = pName; // For modal
+
+                        const price = parseFloat(currentProductData.price || 0);
+                        if(productPriceEl) productPriceEl.textContent = `₹${price.toFixed(2)}`;
+                        updateTotalPriceDisplay(); // Update total price based on initial quantity and price
+
+                        const mrp = parseFloat(currentProductData.mrp || 0);
+                        if (mrp > price && productMrpEl) {
+                            productMrpEl.textContent = `₹${mrp.toFixed(2)}`;
+                            productMrpEl.style.display = 'inline';
+                        } else if (productMrpEl) {
+                            productMrpEl.style.display = 'none';
+                        }
+
+                        let discountText = currentProductData.discount || '';
+                        if (!discountText && mrp > price && price > 0) {
+                            const discountCalc = Math.round(((mrp - price) / mrp) * 100);
+                            if (discountCalc > 0) discountText = `${discountCalc}% Off`;
+                        }
+                        if (discountText && productDiscountEl) {
+                            productDiscountEl.textContent = discountText;
+                            productDiscountEl.style.display = 'inline-block';
+                        } else if (productDiscountEl) {
+                            productDiscountEl.style.display = 'none';
+                        }
+                        
+                        if(sellerStoreNameEl) sellerStoreNameEl.textContent = currentProductData.sellerStoreName || (currentSellerId ? `Store ID: ${currentSellerId}` : "Our Store");
+                        if(productDescriptionEl) productDescriptionEl.textContent = currentProductData.description || "No detailed description available.";
+
+                    } else {
+                        console.error(`DEBUG: ProductInfo - Product data NOT FOUND in Firebase at path '${productPath}'!`);
+                        if(productNameEl) productNameEl.textContent = "Product Not Found";
+                        if(mainImagePlaceholderEl) mainImagePlaceholderEl.textContent = "Product data could not be loaded.";
+                        if(buyNowBtnTrigger) buyNowBtnTrigger.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error(`DEBUG: ProductInfo - Error during Firebase get() for product details:`, error);
+                    if(productNameEl) productNameEl.textContent = "Error Loading Product Details";
+                }
+            }
+
+            if(customerOrderForm) {
+                customerOrderForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (!currentProductData) {
+                        showOrderFormMessage("Product details are not loaded. Cannot place order.", "error");
+                        return;
+                    }
+                    if(placeOrderSubmitBtn) placeOrderSubmitBtn.disabled = true;
+                    showOrderFormMessage("Placing your order...", "info");
+
+                    const orderDetails = {
+                        productId: currentProductId,
+                        productName: currentProductData.name || currentProductData.productName,
+                        sellerId: currentSellerId || currentProductData.sellerId || 'unknown_seller',
+                        quantity: currentQuantity,
+                        pricePerItem: parseFloat(currentProductData.price),
+                        totalAmount: parseFloat(currentProductData.price) * currentQuantity,
+                        customerName: document.getElementById('customerName').value.trim(),
+                        customerMobile: document.getElementById('customerMobile').value.trim(),
+                        customerAddress: document.getElementById('customerAddress').value.trim(),
+                        customerPincode: document.getElementById('customerPincode').value.trim(),
+                        customerCity: document.getElementById('customerCity').value.trim(),
+                        customerState: document.getElementById('customerState').value.trim(),
+                        orderStatus: 'pending',
+                        orderTimestamp: serverTimestamp()
+                    };
+
+                    if (!orderDetails.customerName || !orderDetails.customerMobile || !orderDetails.customerAddress || !orderDetails.customerPincode || !orderDetails.customerCity || !orderDetails.customerState) {
+                        showOrderFormMessage("Please fill all required delivery fields.", "error");
+                        if(placeOrderSubmitBtn) placeOrderSubmitBtn.disabled = false;
+                        return;
+                    }
+                     if (!/^\d{10}$/.test(orderDetails.customerMobile)) {
+                        showOrderFormMessage('Mobile number must be 10 digits.', 'error');
+                         if(placeOrderSubmitBtn) placeOrderSubmitBtn.disabled = false;
+                        return;
+                    }
+
+                    try {
+                        const ordersRef = ref(db, 'orders');
+                        const newOrderRef = push(ordersRef);
+                        await set(newOrderRef, orderDetails);
+
+                        showOrderFormMessage("Order placed successfully! We will contact you shortly.", "success");
+                        customerOrderForm.reset();
+                        currentQuantity = 1;
+                        updateTotalPriceDisplay();
+                        setTimeout(() => {
+                           window.location.hash = '#'; // Close modal
+                           showOrderFormMessage("", "info"); // Clear message
+                        }, 3000);
+
+                    } catch (error) {
+                        console.error("Error placing order:", error);
+                        showOrderFormMessage("Failed to place order: " + error.message, "error");
+                    } finally {
+                        if(placeOrderSubmitBtn) placeOrderSubmitBtn.disabled = false;
+                    }
+                });
+            }
+
+            // Initial Load
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log("DEBUG: ProductInfo - DOMContentLoaded.");
+                if (typeof db !== 'undefined') { // Ensure db is initialized
+                    loadProductDetails();
+                } else {
+                    console.error("DEBUG: ProductInfo - DB not ready on DOMContentLoaded.");
+                    if(productNameEl) productNameEl.textContent = 'DB Connection Error';
+                }
+            });
+
+        } catch (e) {
+            console.error("DEBUG: ProductInfo - CRITICAL SCRIPT ERROR (Firebase init or general setup):", e);
+            document.body.innerHTML = `<h1 style='color:red; text-align:center; padding-top:50px;'>Critical Error: ${e.message}. Check console.</h1>`;
+        }
+    </script>
+</body>
+</html>
