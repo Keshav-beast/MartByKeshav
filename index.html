@@ -152,33 +152,33 @@
         .homepage-product-grid {
             display: grid;
             gap: 16px;
-            grid-template-columns: repeat(2, 1fr); /* Two columns on mobile */
+            grid-template-columns: repeat(2, 1fr);
         }
 
         @media (min-width: 640px) {
             .homepage-product-grid {
                 gap: 20px;
-                grid-template-columns: repeat(2, 1fr); /* Two columns on small screens */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (min-width: 1024px) {
             .homepage-product-grid {
                 gap: 24px;
-                grid-template-columns: repeat(3, 1fr); /* Three columns on tablets */
+                grid-template-columns: repeat(3, 1fr);
             }
         }
 
         @media (min-width: 1280px) {
             .homepage-product-grid {
-                grid-template-columns: repeat(4, 1fr); /* Four columns on desktop */
+                grid-template-columns: repeat(4, 1fr);
             }
         }
 
         @media (max-width: 480px) {
             .homepage-product-grid {
                 gap: 12px;
-                grid-template-columns: repeat(2, 1fr); /* Ensure two columns on small mobiles */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -202,7 +202,7 @@
 
         .product-image-public {
             width: 100%;
-            padding-top: 75%; /* 4:3 aspect ratio for better mobile fit */
+            padding-top: 75%;
             background: var(--bg-tertiary);
             position: relative;
             overflow: hidden;
@@ -334,8 +334,62 @@
             background: var(--accent-secondary);
         }
 
+        /* Stories Section */
+        .stories-section {
+            padding: 40px 0;
+            overflow: hidden;
+        }
+
+        .stories-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px; /* Increased gap for larger stories */
+            padding: 16px;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+
+        .stories-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .story-item {
+            flex: 0 0 auto;
+            width: 120px; /* Increased size */
+            height: 120px; /* Increased size */
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid var(--accent-primary);
+            box-shadow: var(--shadow-light);
+            cursor: pointer;
+        }
+
+        .story-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-item:hover video {
+            transform: scale(1.1);
+        }
+
+        .story-item .no-video-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.95em; /* Slightly larger for bigger stories */
+            color: var(--text-light);
+        }
+
         #loadingProductsPublic,
-        #noProductsPublic {
+        #noProductsPublic,
+        #loadingProductsPublicFashion,
+        #noProductsPublicFashion,
+        #loadingStories,
+        #noStories {
             grid-column: 1 / -1;
             text-align: center;
             padding: 40px;
@@ -343,11 +397,15 @@
             color: var(--text-secondary);
         }
 
-        #loadingProductsPublic {
+        #loadingProductsPublic,
+        #loadingProductsPublicFashion,
+        #loadingStories {
             position: relative;
         }
 
-        #loadingProductsPublic::before {
+        #loadingProductsPublic::before,
+        #loadingProductsPublicFashion::before,
+        #loadingStories::before {
             content: '';
             display: inline-block;
             width: 32px;
@@ -398,7 +456,8 @@
                 padding: 0 12px;
             }
 
-            .main-products-section {
+            .main-products-section,
+            .stories-section {
                 padding: 24px 0;
             }
 
@@ -431,6 +490,15 @@
 
             .product-info-public {
                 padding: 12px;
+            }
+
+            .story-item {
+                width: 100px; /* Increased size for tablet */
+                height: 100px; /* Increased size for tablet */
+            }
+
+            .story-item .no-video-text {
+                font-size: 0.9em;
             }
         }
 
@@ -474,6 +542,15 @@
                 font-size: 0.75em;
                 padding: 4px 8px;
             }
+
+            .story-item {
+                width: 90px; /* Increased size for mobile */
+                height: 90px; /* Increased size for mobile */
+            }
+
+            .story-item .no-video-text {
+                font-size: 0.85em;
+            }
         }
     </style>
 </head>
@@ -489,43 +566,66 @@
     </header>
 
     <main class="container main-products-section">
-        <h1 class="section-title">Explore Our Products</h1>
+        <!-- Gadgets Section -->
+        <section id="gadgetsSection">
+            <h1 class="section-title">Gadgets & More</h1>
+            <div class="homepage-product-grid" id="gadgetsProductGrid">
+                <p id="loadingProductsPublic">Loading gadgets...</p>
+                <p id="noProductsPublic" style="display:none;">No gadgets available right now.</p>
+            </div>
+        </section>
 
-        <div class="homepage-product-grid" id="homepageProductGridContainer">
-            <p id="loadingProductsPublic">Loading products, please wait...</p>
-            <p id="noProductsPublic" style="display:none;">No products available right now. Please check back soon!</p>
-            <!-- Product cards will be dynamically inserted here by JavaScript -->
-        </div>
+        <!-- Stories Section -->
+        <section class="stories-section">
+            <h1 class="section-title">Explore Stories</h1>
+            <div class="stories-container" id="storiesContainer">
+                <p id="loadingStories">Loading stories...</p>
+                <p id="noStories" style="display:none;">No stories available.</p>
+            </div>
+        </section>
+
+        <!-- Fashion Section -->
+        <section id="fashionSection">
+            <h1 class="section-title">Fashion</h1>
+            <div class="homepage-product-grid" id="fashionProductGrid">
+                <p id="loadingProductsPublicFashion">Loading fashion items...</p>
+                <p id="noProductsPublicFashion" style="display:none;">No fashion items available right now.</p>
+            </div>
+        </section>
     </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getDatabase, ref, onValue, query /*, orderByChild, equalTo */ } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-        // ❗❗❗ CRITICAL: REPLACE WITH YOUR ACTUAL FIREBASE CONFIGURATION ❗❗❗
         const firebaseConfig = {
-            apiKey: "AIzaSyCxR7ldRWy3Q-QlqmaHbbgNNlTxIsmJuRw", // YOUR_API_KEY
-            authDomain: "myecomapp-4290b.firebaseapp.com",    // YOUR_AUTH_DOMAIN
-            databaseURL: "https://myecomapp-4290b-default-rtdb.firebaseio.com", // YOUR_DATABASE_URL
-            projectId: "myecomapp-4290b",                   // YOUR_PROJECT_ID
-            storageBucket: "myecomapp-4290b.firebasestorage.app", // YOUR_STORAGE_BUCKET
-            messagingSenderId: "133698166939",             // YOUR_MESSAGING_SENDER_ID
-            appId: "1:133698166939:web:0f9f3075864dc64a77e63e" // YOUR_APP_ID
+            apiKey: "AIzaSyCxR7ldRWy3Q-QlqmaHbbgNNlTxIsmJuRw",
+            authDomain: "myecomapp-4290b.firebaseapp.com",
+            databaseURL: "https://myecomapp-4290b-default-rtdb.firebaseio.com",
+            projectId: "myecomapp-4290b",
+            storageBucket: "myecomapp-4290b.firebasestorage.app",
+            messagingSenderId: "133698166939",
+            appId: "1:133698166939:web:0f9f3075864dc64a77e63e"
         };
-        // ❗❗❗ END OF FIREBASE CONFIGURATION ❗❗❗
 
         let db;
         let allProductsData = {};
+        let allStoriesData = {};
 
         try {
-            // console.log("Homepage - Config:", firebaseConfig.projectId);
             const app = initializeApp(firebaseConfig);
             db = getDatabase(app);
-            // console.log("Homepage - Firebase init OK.");
+            console.log("Homepage - Firebase init OK.");
 
-            const productGridContainer = document.getElementById('homepageProductGridContainer');
-            const loadingMessage = document.getElementById('loadingProductsPublic');
-            const noProductsMessage = document.getElementById('noProductsPublic');
+            const gadgetsGrid = document.getElementById('gadgetsProductGrid');
+            const fashionGrid = document.getElementById('fashionProductGrid');
+            const storiesContainer = document.getElementById('storiesContainer');
+            const loadingGadgets = document.getElementById('loadingProductsPublic');
+            const noGadgets = document.getElementById('noProductsPublic');
+            const loadingFashion = document.getElementById('loadingProductsPublicFashion');
+            const noFashion = document.getElementById('noProductsPublicFashion');
+            const loadingStories = document.getElementById('loadingStories');
+            const noStories = document.getElementById('noStories');
             const searchForm = document.getElementById('searchForm');
             const searchInput = document.getElementById('searchInputHomepage');
 
@@ -537,15 +637,11 @@
 
                 const cardLink = document.createElement('a');
                 let productDetailUrl = `productInfo.html?productId=${productId}`;
-                // If products are fetched from a 'products_listed' node that includes 'sellerId'
                 if (productData.sellerId) {
                     productDetailUrl += `&sellerId=${productData.sellerId}`;
-                } 
-                // If products were fetched from 'sellers/{sellerId}/products' and sellerIdIfKnown is passed
-                else if (sellerIdIfKnown) {
-                     productDetailUrl += `&sellerId=${sellerIdIfKnown}`;
+                } else if (sellerIdIfKnown) {
+                    productDetailUrl += `&sellerId=${sellerIdIfKnown}`;
                 }
-
 
                 cardLink.href = productDetailUrl;
                 cardLink.classList.add('product-card-public');
@@ -565,7 +661,6 @@
                 const price = parseFloat(productData.price || 0);
                 const mrp = parseFloat(productData.mrp || 0);
                 let discountDisplay = productData.discount || '';
-
                 if (!discountDisplay && mrp > price && price > 0) {
                     const discountPercent = Math.round(((mrp - price) / mrp) * 100);
                     if (discountPercent > 0) discountDisplay = `${discountPercent}% Off`;
@@ -579,7 +674,6 @@
                 if (isOutOfStock) {
                     badgesHTML += `<div class="product-badge badge-out-of-stock">Out of Stock</div>`;
                 }
-                // Example: if (productData.isTrending) badgesHTML += `<div class="product-badge badge-trending">🔥 Trending</div>`;
 
                 cardLink.innerHTML = `
                     <div style="position:relative;">
@@ -605,84 +699,123 @@
                 return cardLink;
             }
 
-            function displayHomepageProducts(productsToDisplay) {
-                if (loadingMessage) loadingMessage.style.display = 'none';
-                if (!productGridContainer) { console.error("Homepage: Product grid container not found!"); return; }
-                
-                productGridContainer.innerHTML = '';
+            function createStoryItem(storyId, storyData) {
+                const storyItem = document.createElement('div');
+                storyItem.classList.add('story-item');
+                storyItem.dataset.storyId = storyId;
 
-                if (!productsToDisplay || Object.keys(productsToDisplay).length === 0) {
-                    if (noProductsMessage) {
-                         noProductsMessage.textContent = "No products found matching your criteria.";
-                         noProductsMessage.style.display = 'block';
-                    }
-                    // console.log("Homepage - No products to display based on current data/filter.");
-                    return;
-                }
-                if (noProductsMessage) noProductsMessage.style.display = 'none';
+                const videoUrl = storyData.videoUrl || '';
+                storyItem.innerHTML = videoUrl ? `
+                    <video autoplay muted loop>
+                        <source src="${videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                ` : `<span class="no-video-text">No Video</span>`;
 
-                let displayedCount = 0;
-                for (const productId in productsToDisplay) { // Assuming productsToDisplay is flat {prodId: data, ...}
-                    if (productsToDisplay.hasOwnProperty(productId)) {
-                        const productData = productsToDisplay[productId];
-                        if (productData.status && (productData.status !== 'live' && productData.status !== 'approved')) {
-                            continue;
-                        }
-                        // Pass productData.sellerId if it exists, for the link to productInfo.html
-                        const cardElement = createHomepageProductCard(productId, productData, productData.sellerId);
-                        if (cardElement) {
-                            productGridContainer.appendChild(cardElement);
-                            displayedCount++;
-                        }
-                    }
+                if (videoUrl && storyData.productId) {
+                    storyItem.addEventListener('click', () => {
+                        window.location.href = `productInfo.html?productId=${storyData.productId}`;
+                    });
                 }
-                // console.log(`Homepage - Rendered ${displayedCount} products.`);
-                 if (displayedCount === 0 && noProductsMessage) {
-                    noProductsMessage.textContent = "No live products available currently.";
-                    noProductsMessage.style.display = 'block';
-                }
+                return storyItem;
             }
-            
-            // --- CHOOSE YOUR FIREBASE PATH FOR PRODUCTS ---
-            // This path should point to a node where ALL products (from all sellers, if applicable) are listed.
-            // E.g., 'products_listed' if you have a flat list, or 'sellers' if you iterate through sellers.
-            const productsRefPath = 'products_listed'; // <<<< MOST LIKELY THIS IS WHAT YOU WANT FOR A HOMEPAGE
-            // const productsRefPath = 'sellers'; // <<<< Use this if you want to iterate through sellers and their products
 
-            const productsQuery = ref(db, productsRefPath);
-            
-            console.log(`Homepage - Setting up Firebase listener for products at: ${productsRefPath}`);
-            onValue(productsQuery, (snapshot) => {
-                const rawData = snapshot.val();
-                // console.log(`Homepage - Raw data from Firebase '${productsRefPath}' node:`, rawData);
+            function displayHomepageProductsAndStories(products, stories) {
+                // Gadgets
+                if (loadingGadgets) loadingGadgets.style.display = 'none';
+                if (gadgetsGrid) gadgetsGrid.innerHTML = '';
+                if (noGadgets) noGadgets.style.display = 'none';
 
-                let productsToProcess = {};
-                if (productsRefPath === 'sellers' && rawData) {
-                    // If fetching from 'sellers', aggregate all products from all sellers
-                    for (const sellerId in rawData) {
-                        if (rawData[sellerId] && rawData[sellerId].products) {
-                            for (const productId in rawData[sellerId].products) {
-                                // Add sellerId to product data if it's not already there for linking
-                                if (!rawData[sellerId].products[productId].sellerId) {
-                                    rawData[sellerId].products[productId].sellerId = sellerId;
+                // Fashion
+                if (loadingFashion) loadingFashion.style.display = 'none';
+                if (fashionGrid) fashionGrid.innerHTML = '';
+                if (noFashion) noFashion.style.display = 'none';
+
+                // Stories
+                if (loadingStories) loadingStories.style.display = 'none';
+                if (storiesContainer) storiesContainer.innerHTML = '';
+                if (noStories) noStories.style.display = 'none';
+
+                const gadgetCategories = ['Electronics', 'Home & Kitchen', 'Beauty & Health', 'Books', 'Sports & Outdoors', 'Other'];
+                const fashionCategories = ['Fashion'];
+
+                let gadgetsCount = 0, fashionCount = 0;
+
+                // Products
+                if (products && Object.keys(products).length > 0) {
+                    for (const productId in products) {
+                        if (products.hasOwnProperty(productId)) {
+                            const productData = products[productId];
+                            if (productData.status && productData.status !== 'live') continue;
+
+                            const cardElement = createHomepageProductCard(productId, productData, productData.sellerId);
+                            if (cardElement) {
+                                if (gadgetCategories.includes(productData.category)) {
+                                    gadgetsGrid.appendChild(cardElement);
+                                    gadgetsCount++;
+                                } else if (fashionCategories.includes(productData.category)) {
+                                    fashionGrid.appendChild(cardElement);
+                                    fashionCount++;
                                 }
-                                productsToProcess[productId] = rawData[sellerId].products[productId];
                             }
                         }
                     }
-                } else if (rawData) {
-                    // If fetching from a flat list like 'products_listed'
-                    productsToProcess = rawData;
                 }
-                
-                allProductsData = productsToProcess || {};
-                displayHomepageProducts(allProductsData);
+
+                if (gadgetsCount === 0 && noGadgets) noGadgets.style.display = 'block';
+                if (fashionCount === 0 && noFashion) noFashion.style.display = 'block';
+
+                // Stories
+                if (stories && Object.keys(stories).length > 0) {
+                    for (const storyId in stories) {
+                        if (stories.hasOwnProperty(storyId)) {
+                            const storyItem = createStoryItem(storyId, stories[storyId]);
+                            if (storyItem) {
+                                storiesContainer.appendChild(storyItem);
+                                const video = storyItem.querySelector('video');
+                                if (video) {
+                                    video.play().catch(e => console.warn(`Story ${storyId} failed to autoplay:`, e));
+                                }
+                            }
+                        }
+                    }
+                } else if (noStories) {
+                    noStories.style.display = 'block';
+                }
+            }
+
+            const productsRefPath = 'products_listed';
+            const productsQuery = ref(db, productsRefPath);
+            const storiesQuery = ref(db, 'stories');
+
+            console.log(`Homepage - Setting up Firebase listener for products at: ${productsRefPath}`);
+            onValue(productsQuery, (snapshot) => {
+                allProductsData = snapshot.val() || {};
+                displayHomepageProductsAndStories(allProductsData, allStoriesData);
             }, (error) => {
                 console.error(`Homepage - Firebase read failed for '${productsRefPath}': `, error);
-                if (loadingMessage) loadingMessage.style.display = 'none';
-                if (noProductsMessage) {
-                    noProductsMessage.textContent = 'Failed to load products. Please try again later.';
-                    noProductsMessage.style.display = 'block';
+                if (loadingGadgets) loadingGadgets.style.display = 'none';
+                if (loadingFashion) loadingFashion.style.display = 'none';
+                if (noGadgets) {
+                    noGadgets.textContent = 'Failed to load gadgets.';
+                    noGadgets.style.display = 'block';
+                }
+                if (noFashion) {
+                    noFashion.textContent = 'Failed to load fashion items.';
+                    noFashion.style.display = 'block';
+                }
+            });
+
+            console.log(`Homepage - Setting up Firebase listener for stories`);
+            onValue(storiesQuery, (snapshot) => {
+                allStoriesData = snapshot.val() || {};
+                displayHomepageProductsAndStories(allProductsData, allStoriesData);
+            }, (error) => {
+                console.error(`Homepage - Firebase read failed for 'stories': `, error);
+                if (loadingStories) loadingStories.style.display = 'none';
+                if (noStories) {
+                    noStories.textContent = 'Failed to load stories.';
+                    noStories.style.display = 'block';
                 }
             });
 
@@ -691,7 +824,7 @@
                     e.preventDefault();
                     const searchTerm = searchInput.value.toLowerCase().trim();
                     if (!searchTerm) {
-                        displayHomepageProducts(allProductsData);
+                        displayHomepageProductsAndStories(allProductsData, allStoriesData);
                         return;
                     }
                     const filteredProducts = {};
@@ -711,27 +844,36 @@
                             }
                         }
                     }
-                    displayHomepageProducts(filteredProducts);
+                    displayHomepageProductsAndStories(filteredProducts, allStoriesData);
                 });
                 searchInput.addEventListener('input', () => {
                     if (searchInput.value.trim() === "") {
-                        displayHomepageProducts(allProductsData);
+                        displayHomepageProductsAndStories(allProductsData, allStoriesData);
                     }
                 });
             }
 
         } catch (e) {
             console.error("Homepage - CRITICAL SCRIPT ERROR:", e);
-            // Try to display an error on the page itself if possible
-             const body = document.querySelector('body');
+            const body = document.querySelector('body');
             if (body) {
                 const errorDiv = document.createElement('div');
-                errorDiv.style.color = 'red'; errorDiv.style.padding = '20px';
-                errorDiv.style.textAlign = 'center'; errorDiv.style.backgroundColor = 'white';
+                errorDiv.style.color = 'red';
+                errorDiv.style.padding = '20px';
+                errorDiv.style.textAlign = 'center';
+                errorDiv.style.backgroundColor = 'white';
                 errorDiv.textContent = `CRITICAL ERROR: ${e.message}. Check console (F12). Ensure Firebase config is correct and SDKs are loaded.`;
-                if(document.getElementById('loadingProductsPublic')) document.getElementById('loadingProductsPublic').style.display = 'none';
-                if(document.getElementById('noProductsPublic')) document.getElementById('noProductsPublic').style.display = 'none';
-                if (body.firstChild) { body.insertBefore(errorDiv, body.firstChild); } else { body.appendChild(errorDiv); }
+                if (document.getElementById('loadingProductsPublic')) document.getElementById('loadingProductsPublic').style.display = 'none';
+                if (document.getElementById('noProductsPublic')) document.getElementById('noProductsPublic').style.display = 'none';
+                if (document.getElementById('loadingProductsFashion')) document.getElementById('loadingProductsFashion').style.display = 'none';
+                if (document.getElementById('noProductsFashion')) document.getElementById('noProductsFashion').style.display = 'none';
+                if (document.getElementById('loadingStories')) document.getElementById('loadingStories').style.display = 'none';
+                if (document.getElementById('noStories')) document.getElementById('noStories').style.display = 'none';
+                if (body.firstChild) {
+                    body.insertBefore(errorDiv, body.firstChild);
+                } else {
+                    body.appendChild(errorDiv);
+                }
             }
         }
     </script>
